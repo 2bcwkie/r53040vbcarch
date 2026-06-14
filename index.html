@@ -2281,22 +2281,11 @@ if (screen.orientation) {
 
 /* ── ZOOM RESET ────────────────────────
    HTML の viewport meta で minimum/maximum-scale=1.0
-   を設定して等倍レンダリングを強制。
-   ページ描画後にスケール制限を解除して
-   ピンチズームを再有効化する。
+   viewport meta の minimum/maximum-scale=1.0 を常時維持。
+   iOS Safari 16+ / Chrome はアクセシビリティのため
+   この制限下でもピンチズームを許可するので、
+   ユーザーの操作性は損なわない。
    ──────────────────────────────────── */
-window.addEventListener('load', () => {
-  const vp = document.getElementById('vp');
-  if (!vp) return;
-
-  // ページが等倍で描画された後、スケール制限を解除
-  setTimeout(() => {
-    vp.setAttribute('content',
-      'width=device-width, initial-scale=1.0, viewport-fit=cover');
-    syncHeaderHeight();
-  }, 600);
-});
-
 // bfcache（戻る/進む）復帰時はリロードして等倍に戻す
 window.addEventListener('pageshow', (e) => {
   if (e.persisted) location.reload();
