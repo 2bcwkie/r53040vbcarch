@@ -48,12 +48,12 @@
 
 /* ─── RESET ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--font-sans);background:var(--c-ivory);color:var(--c-text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{font-family:var(--font-sans);background:var(--c-ivory);color:var(--c-text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-width:320px}
 button{font-family:inherit;cursor:pointer}
 a{color:inherit;text-decoration:none}
 input,select{font-family:inherit}
-img,iframe{display:block}
+img,iframe{display:block;max-width:100%;height:auto}
 /* focus visible */
 :focus-visible{outline:2px solid var(--c-gold);outline-offset:2px;border-radius:3px}
 
@@ -73,7 +73,7 @@ img,iframe{display:block}
   max-width:1040px;margin:0 auto;
   padding:0 16px;
   display:flex;align-items:center;
-  height:54px;gap:12px;
+  min-height:54px;gap:12px;
 }
 /* logo */
 .logo{display:flex;align-items:center;gap:9px;flex-shrink:0;min-width:0}
@@ -86,7 +86,7 @@ img,iframe{display:block}
 .logo-school{font-family:var(--font-display);font-size:10px;color:var(--c-slate-light);letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .logo-team{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--c-gold-light);letter-spacing:.03em;white-space:nowrap}
 /* search */
-.hd-search{flex:1;max-width:380px;position:relative;display:flex;align-items:center}
+.hd-search{flex:1;max-width:380px;min-width:0;position:relative;display:flex;align-items:center}
 .hd-search svg{position:absolute;left:10px;width:14px;height:14px;stroke:rgba(255,255,255,.35);fill:none;stroke-width:2;stroke-linecap:round;pointer-events:none}
 #searchInput{
   width:100%;background:rgba(255,255,255,.08);
@@ -140,7 +140,7 @@ img,iframe{display:block}
 #filter-bar{
   background:var(--c-white);
   border-bottom:1px solid var(--c-border);
-  position:sticky;top:54px;z-index:190;
+  position:sticky;top:var(--header-h,54px);z-index:190;
 }
 .fb-inner{
   max-width:1040px;margin:0 auto;padding:10px 16px;
@@ -213,7 +213,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 /* ─── card grid ─── */
 .card-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
   gap:14px;margin-bottom:32px;
 }
 
@@ -262,8 +262,8 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 .b-school{background:var(--cat-school-bg);color:var(--cat-school-tx);border:1px solid var(--cat-school-bd)}
 
 .vcard-date{font-family:var(--font-display);font-size:15px;color:var(--c-slate);letter-spacing:.03em}
-.vcard-title{font-family:var(--font-serif);font-size:16px;font-weight:700;color:var(--c-navy-deep);line-height:1.45;margin-bottom:6px;letter-spacing:-.01em}
-.vcard-tournament{font-size:13px;color:var(--c-slate);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vcard-title{font-family:var(--font-serif);font-size:16px;font-weight:700;color:var(--c-navy-deep);line-height:1.45;margin-bottom:6px;letter-spacing:-.01em;word-break:break-word;overflow-wrap:break-word}
+.vcard-tournament{font-size:13px;color:var(--c-slate);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .vcard-venue{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--c-slate-light);margin-bottom:10px}
 .vcard-venue svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
 /* footer row */
@@ -295,7 +295,8 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
   background:#FF0000;color:#fff;border:none;border-radius:var(--radius-sm);
   font-family:var(--font-sans);font-size:14px;font-weight:500;
   cursor:pointer;transition:background .14s,transform .14s;
-  text-decoration:none;
+  text-decoration:none;text-align:center;word-break:keep-all;
+  max-width:100%;
 }
 .yt-hero-btn:hover{background:#CC0000;transform:scale(1.03)}
 .yt-hero-btn svg{width:20px;height:20px;fill:#fff;stroke:none;flex-shrink:0}
@@ -303,7 +304,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 /* video list */
 .vlist{padding:14px 18px 16px}
 .vlist-hd{font-size:12px;font-weight:500;color:var(--c-slate);letter-spacing:.07em;margin-bottom:10px;text-transform:uppercase}
-.vlist-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--c-border-light);font-size:14px;color:var(--c-text-2);line-height:1.5}
+.vlist-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--c-border-light);font-size:14px;color:var(--c-text-2);line-height:1.5;word-break:break-word;overflow-wrap:break-word}
 .vlist-item:last-of-type{border-bottom:none}
 .vlist-num{font-family:var(--font-display);font-size:14px;color:var(--c-slate-light);flex-shrink:0;min-width:22px;padding-top:1px}
 .vlist-actions{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
@@ -322,6 +323,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
   background:var(--c-navy-deep);color:var(--c-gold-light);
   font-size:12px;padding:8px 18px;border-radius:20px;
   opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9000;white-space:nowrap;
+  max-width:calc(100vw - 32px);
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -348,7 +350,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 }
 .tl-item:hover{border-left-color:var(--c-navy);box-shadow:0 2px 10px rgba(13,34,64,.08)}
 .tl-item-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:5px;flex-wrap:wrap}
-.tl-item-title{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--c-navy-deep);flex:1;min-width:0;line-height:1.4}
+.tl-item-title{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--c-navy-deep);flex:1;min-width:0;line-height:1.4;word-break:break-word;overflow-wrap:break-word}
 .tl-item-date{font-family:var(--font-display);font-size:13px;color:var(--c-slate);flex-shrink:0}
 .tl-item-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 
@@ -379,10 +381,9 @@ footer{
 @media(max-width:600px){
   .logo-school{display:none}
   .logo-team{font-size:13px}
-  .hd-inner{height:50px}
+  .hd-inner{min-height:50px}
   .hd-search{max-width:none;flex:1}
   .hd-meta{display:none}
-  #filter-bar{top:50px}
   .sort-sel{display:none}
   .view-btn span{display:none}
   .view-btn{padding:0 10px}
@@ -1837,7 +1838,7 @@ footer{
     "startDate": "2023-04-07",
     "endDate": "2023-04-07",
     "isMultiDay": false,
-    "year": 2023,
+    "year": 2024,
     "category": "入学／卒業式",
     "catGroup": "学校行事",
     "tournament": "",
@@ -2253,6 +2254,25 @@ function setLastUpdated() {
 hashToState();
 setLastUpdated();
 render();
+
+/* ── DYNAMIC HEADER HEIGHT ─────────────
+   ヘッダー高さを計測し、フィルターバーの
+   sticky top を動的に設定（ズーム・リサイズ対応）
+   ──────────────────────────────────── */
+function syncHeaderHeight() {
+  const hdr = document.getElementById('site-header');
+  if (!hdr) return;
+  const h = hdr.getBoundingClientRect().height;
+  document.documentElement.style.setProperty('--header-h', h + 'px');
+}
+syncHeaderHeight();
+window.addEventListener('resize', syncHeaderHeight);
+// 画面回転時にも対応
+if (screen.orientation) {
+  screen.orientation.addEventListener('change', () => {
+    setTimeout(syncHeaderHeight, 100);
+  });
+}
 </script>
 </body>
 </html>
