@@ -2255,10 +2255,6 @@ function setLastUpdated() {
 hashToState();
 setLastUpdated();
 render();
-// リロード時にスクロール位置もリセット
-if (!location.hash) {
-  window.scrollTo(0, 0);
-}
 
 /* ── DYNAMIC HEADER HEIGHT ─────────────
    ヘッダー高さを計測し、フィルターバーの
@@ -2281,11 +2277,20 @@ if (screen.orientation) {
 
 /* ── ZOOM RESET ────────────────────────
    HTML の viewport meta で minimum/maximum-scale=1.0
-   viewport meta の minimum/maximum-scale=1.0 を常時維持。
-   iOS Safari 16+ / Chrome はアクセシビリティのため
-   この制限下でもピンチズームを許可するので、
-   ユーザーの操作性は損なわない。
+   を常時維持して等倍レンダリングを強制。
+   load 後にカードを全再描画することで、
+   画面外のキャッシュ済みタイルも等倍に更新する。
    ──────────────────────────────────── */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    // 全カードの DOM を再構築 → キャッシュタイルを破棄
+    render();
+    // スクロール位置をリセット
+    if (!location.hash) window.scrollTo(0, 0);
+    syncHeaderHeight();
+  }, 80);
+});
+
 // bfcache（戻る/進む）復帰時はリロードして等倍に戻す
 window.addEventListener('pageshow', (e) => {
   if (e.persisted) location.reload();
