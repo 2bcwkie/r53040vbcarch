@@ -50,7 +50,7 @@
 /* ─── RESET ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:clip;touch-action:manipulation}
-body{font-family:var(--font-sans);background:var(--c-ivory);color:var(--c-text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-width:320px;touch-action:manipulation}
+body{font-family:var(--font-sans);background:var(--c-ivory);color:var(--c-text);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-width:320px;touch-action:manipulation;overflow-wrap:break-word}
 button{font-family:inherit;cursor:pointer}
 a{color:inherit;text-decoration:none}
 input,select{font-family:inherit}
@@ -199,13 +199,13 @@ img,iframe{display:block;max-width:100%;height:auto}
 /* ══════════════════════════
    MAIN
 ══════════════════════════ */
-main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
+main{max-width:1040px;margin:0 auto;padding:0 16px 72px;overflow-x:hidden}
 
 /* ─── section header ─── */
 .sec-head{
   display:flex;align-items:baseline;gap:10px;
   padding:14px 0 10px;border-bottom:1px solid var(--c-border);
-  margin-bottom:14px;
+  margin-bottom:14px;overflow:hidden;
 }
 .sec-year{font-family:var(--font-display);font-size:32px;font-weight:600;color:var(--c-navy-deep);letter-spacing:-.02em;line-height:1}
 .sec-wareki{font-family:var(--font-serif);font-size:15px;color:var(--c-slate)}
@@ -215,7 +215,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 .card-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));
-  gap:14px;margin-bottom:32px;
+  gap:14px;margin-bottom:32px;overflow:hidden;
 }
 
 /* ══════════════════════════
@@ -227,7 +227,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
   border-top:3px solid var(--c-gold);
   border-radius:var(--radius-md);
   box-shadow:var(--shadow-card);
-  overflow:hidden;
+  overflow:hidden;min-width:0;
   transition:box-shadow .2s,transform .2s,border-top-color .2s;
   animation:fadeUp .32s ease both;
 }
@@ -246,6 +246,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 .vcard-trigger{
   width:100%;text-align:left;background:none;border:none;
   padding:16px 18px 14px;display:block;
+  overflow:hidden;min-width:0;max-width:100%;
 }
 /* meta row */
 .vcard-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:5px}
@@ -262,10 +263,10 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 .b-event{background:var(--cat-event-bg);color:var(--cat-event-tx);border:1px solid var(--cat-event-bd)}
 .b-school{background:var(--cat-school-bg);color:var(--cat-school-tx);border:1px solid var(--cat-school-bd)}
 
-.vcard-date{font-family:var(--font-display);font-size:15px;color:var(--c-slate);letter-spacing:.03em}
+.vcard-date{font-family:var(--font-display);font-size:15px;color:var(--c-slate);letter-spacing:.03em;flex-shrink:1;white-space:nowrap}
 .vcard-title{font-family:var(--font-serif);font-size:16px;font-weight:700;color:var(--c-navy-deep);line-height:1.45;margin-bottom:6px;letter-spacing:-.01em;word-break:break-word;overflow-wrap:break-word}
-.vcard-tournament{font-size:13px;color:var(--c-slate);margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-.vcard-venue{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--c-slate-light);margin-bottom:10px}
+.vcard-tournament{font-size:13px;color:var(--c-slate);margin-bottom:5px;line-height:1.45;word-break:break-word;overflow-wrap:break-word}
+.vcard-venue{display:flex;align-items:flex-start;gap:5px;font-size:13px;color:var(--c-slate-light);margin-bottom:10px;word-break:break-word;overflow-wrap:break-word}
 .vcard-venue svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
 /* footer row */
 .vcard-foot{border-top:1px solid var(--c-border-light);padding-top:10px;display:flex;align-items:center;justify-content:space-between}
@@ -303,7 +304,7 @@ main{max-width:1040px;margin:0 auto;padding:0 16px 72px}
 .yt-hero-btn svg{width:20px;height:20px;fill:#fff;stroke:none;flex-shrink:0}
 
 /* video list */
-.vlist{padding:14px 18px 16px}
+.vlist{padding:14px 18px 16px;overflow:hidden}
 .vlist-hd{font-size:12px;font-weight:500;color:var(--c-slate);letter-spacing:.07em;margin-bottom:10px;text-transform:uppercase}
 .vlist-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--c-border-light);font-size:14px;color:var(--c-text-2);line-height:1.5;word-break:break-word;overflow-wrap:break-word}
 .vlist-item:last-of-type{border-bottom:none}
@@ -2037,7 +2038,7 @@ function renderGrid(items) {
         <span class="sec-cnt">${list.length}件</span>
       </div>
       <div class="card-grid" role="list">
-        ${list.map(d => `<div role="listitem">${cardHtml(d)}</div>`).join('')}
+        ${list.map(d => `<div role="listitem" style="min-width:0">${cardHtml(d)}</div>`).join('')}
       </div>
     </section>`;
   });
