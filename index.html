@@ -2,29 +2,8 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script>
-/* ── 描画前ズームリセット ──────────────────
-   ブラウザが前回のズーム倍率を保持している場合、
-   描画前にページを再ナビゲートして等倍にリセット */
-(function(){
-  if(history.scrollRestoration) history.scrollRestoration='manual';
-  try{
-    /* ズーム検知：visualViewport.scale > 1 なら拡大状態 */
-    if(window.visualViewport && window.visualViewport.scale > 1.05){
-      /* 無限ループ防止フラグ */
-      var k='_vbzr';
-      if(!sessionStorage.getItem(k)){
-        sessionStorage.setItem(k,'1');
-        /* reload ではなく navigate → ブラウザがズームをリセット */
-        location.replace(location.pathname+(location.hash||''));
-        return;
-      }
-    }
-    sessionStorage.removeItem('_vbzr');
-  }catch(e){}
-})();
-</script>
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<script>if(history.scrollRestoration)history.scrollRestoration='manual';</script>
 <meta name="description" content="サレジオ中学校バレーボール部 動画アーカイブ">
 <meta name="robots" content="noindex,nofollow">
 <title>サレジオ中 バレー部 アーカイブ</title>
@@ -416,19 +395,6 @@ footer{
   .year-tab{padding:9px 14px;font-size:17px}
   .card-grid{grid-template-columns:1fr}
 }
-/* ── ZOOM RESET BUTTON ── */
-#zoomReset{
-  display:none;position:fixed;
-  bottom:20px;right:16px;z-index:9000;
-  align-items:center;gap:5px;
-  padding:10px 16px;min-height:var(--tap);
-  background:var(--c-navy-deep);color:var(--c-gold-light);
-  border:1.5px solid var(--c-gold);border-radius:24px;
-  font-family:var(--font-sans);font-size:13px;font-weight:500;
-  box-shadow:0 4px 20px rgba(0,0,0,.35);
-  cursor:pointer;-webkit-tap-highlight-color:transparent;
-}
-#zoomReset:active{background:#162D50;transform:scale(.96)}
 </style>
 </head>
 <body>
@@ -2289,10 +2255,7 @@ function setLastUpdated() {
 hashToState();
 setLastUpdated();
 render();
-// リロード時にスクロール位置もリセット（ハッシュ指定がない場合）
-if ('scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
-}
+// リロード時にスクロール位置もリセット
 if (!location.hash) {
   window.scrollTo(0, 0);
 }
@@ -2317,42 +2280,27 @@ if (screen.orientation) {
 }
 
 /* ── ZOOM RESET ────────────────────────
-   bfcache復帰時 + フォールバックボタン
+   HTML の viewport meta で minimum/maximum-scale=1.0
+   を設定して等倍レンダリングを強制。
+   ページ描画後にスケール制限を解除して
+   ピンチズームを再有効化する。
    ──────────────────────────────────── */
-// bfcache（戻る/進む）からの復帰時
-window.addEventListener('pageshow', (e) => {
-  if (e.persisted) {
-    sessionStorage.removeItem('_vbzr');
-    if (window.visualViewport && window.visualViewport.scale > 1.05) {
-      location.replace(location.pathname + (location.hash || ''));
-    }
-  }
+window.addEventListener('load', () => {
+  const vp = document.getElementById('vp');
+  if (!vp) return;
+
+  // ページが等倍で描画された後、スケール制限を解除
+  setTimeout(() => {
+    vp.setAttribute('content',
+      'width=device-width, initial-scale=1.0, viewport-fit=cover');
+    syncHeaderHeight();
+  }, 600);
 });
 
-// フォールバック：ズーム検知時にリセットボタンを表示
-(function() {
-  if (!window.visualViewport) return;
-
-  // リセットボタンを生成（初期非表示）
-  const btn = document.createElement('button');
-  btn.id = 'zoomReset';
-  btn.setAttribute('aria-label', '表示をリセット');
-  btn.innerHTML = '↺ 表示リセット';
-  document.body.appendChild(btn);
-
-  function checkZoom() {
-    const zoomed = window.visualViewport.scale > 1.08;
-    btn.style.display = zoomed ? 'flex' : 'none';
-  }
-
-  btn.addEventListener('click', () => {
-    sessionStorage.removeItem('_vbzr');
-    location.replace(location.pathname + (location.hash || ''));
-  });
-
-  window.visualViewport.addEventListener('resize', checkZoom);
-  checkZoom();
-})();
+// bfcache（戻る/進む）復帰時はリロードして等倍に戻す
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) location.reload();
+});
 </script>
 </body>
 </html>
