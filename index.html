@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <meta name="description" content="サレジオ中学校バレーボール部 動画アーカイブ">
 <meta name="robots" content="noindex,nofollow">
 <title>サレジオ中 バレー部 アーカイブ</title>
@@ -2254,6 +2254,10 @@ function setLastUpdated() {
 hashToState();
 setLastUpdated();
 render();
+// リロード時にスクロール位置もリセット（ハッシュ指定がない場合）
+if (!location.hash) {
+  window.scrollTo(0, 0);
+}
 
 /* ── DYNAMIC HEADER HEIGHT ─────────────
    ヘッダー高さを計測し、フィルターバーの
@@ -2273,6 +2277,20 @@ if (screen.orientation) {
     setTimeout(syncHeaderHeight, 100);
   });
 }
+
+/* ── ZOOM RESET ────────────────────────
+   リロード時にズームを初期倍率にリセットし、
+   描画完了後にピンチズームを再有効化する
+   ──────────────────────────────────── */
+(function resetZoom() {
+  const vp = document.getElementById('vp');
+  if (!vp) return;
+  // 初期描画完了後に maximum-scale 制限を解除
+  setTimeout(() => {
+    vp.setAttribute('content',
+      'width=device-width, initial-scale=1.0, viewport-fit=cover');
+  }, 400);
+})();
 </script>
 </body>
 </html>
